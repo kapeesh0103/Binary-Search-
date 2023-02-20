@@ -1,5 +1,24 @@
 #include<bits/stdc++.h>
 using namespace std;
+vector<int> fibo(47);
+pair<long long,long long> encodeFibonacci(int n){
+    long long ans=0;int h=0;bool flag=true;int i=46;
+    while(n){
+        
+        while(i>=2 && fibo[i]>n){
+            i--;
+        }
+        if(flag){
+            h=i-1;
+            flag=false;
+        }
+        ans|=(1LL<<(i-2));
+        n-=fibo[i];
+    }
+    ans|=(1LL<<h);
+    return {ans,h};
+    
+}
 void print(vector<vector<int>> &a){
     int n=a.size();int m=a[0].size();
     for(int i=0;i<n;i++){
@@ -24,6 +43,22 @@ for(int i=0;i<n;i++){
     }
 }
 return ans;
+
+}
+// below method find fibonacci number fast doubling in below method.
+pair<int,int> NthFibonacci(int n){
+if(n==0){
+    return {0,1};
+}
+auto p=NthFibonacci(n>>1);
+int c= p.first*(2*p.second - p.first);
+int d=p.first*p.first + p.second*p.second;
+if(n&1){
+    return {d,c+d};
+}
+else{
+    return {c,d};
+}
 
 }
 int NthNumberOfFibonacci(int n){
@@ -67,12 +102,34 @@ int main(){
    print(c); */
    int t;
    cin>>t;
+    
+   for(int i=0;i<47;i++){
+    
+    fibo[i]=NthFibonacci(i).first;
+   }
    while(t--){
      int n;
    cin>>n;
-   cout<<NthNumberOfFibonacci(n)<<endl;
-   }
+//    cout<<NthNumberOfFibonacci(n)<<endl;
+//    cout<<NthFibonacci(n).first<<endl;
+//    cout<<fibo[n]<<endl;
+   auto p=encodeFibonacci(n);
+int ans=0;
+cout<<p.second<<endl;
+    for(long long i=0;i<=p.second;i++){
+        cout<<((p.first>>i)&1LL);
+        if(((p.first>>i)&1LL)){
+                 ans+=fibo[i+2];
+                 
+        }
+    }
+    ans-=fibo[p.second+2];
+   cout<<endl;
     
+    cout<<ans<<endl;
+    cout<<endl;
+   }
+     
    
    return 0;
 
